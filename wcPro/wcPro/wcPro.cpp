@@ -26,11 +26,13 @@ void wordCount(char *fileName, WordList &wordList) {
 	in.open(fileName);
 
 	int wordPosition = 0;
-	bool flag = true;
+	char c = 0;
+	int delta = 'a' - 'A';
 	do {
-		flag = (word[wordPosition] = in.get()) != EOF;
+		c = in.get();
+		if (c >= 'A'&&c <= 'Z') c += delta;
+		process = wordState.stateTransfer(c);
 
-		process = wordState.stateTransfer(word[wordPosition]);
 		switch (process) {
 			//根据不同状态做出不同的响应 
 		case PROCESS_23:
@@ -49,9 +51,10 @@ void wordCount(char *fileName, WordList &wordList) {
 			//单词外部-单词外部，wordPosition不变 
 			break;
 		default:
+			word[wordPosition] = c;
 			wordPosition++;
 		}
-	} while (flag);
+	} while (c != EOF);
 
 	in.close();
 }
