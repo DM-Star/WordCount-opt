@@ -35,13 +35,13 @@ void wordCount(char *fileName, WordList &wordList) {
 			//根据不同状态做出不同的响应 
 		case PROCESS_23:
 			//删去最后一个字符以及前一个连词符，单词数++ 
-			word[wordPosition - 2] = 0;
+			word[wordPosition - 1] = 0;
 			wordList.addWord(word);
 			wordPosition = 0;
 			break;
 		case PROCESS_13:
 			//删去最后一个字符，单词数++ 
-			word[wordPosition - 1] = 0;
+			word[wordPosition] = 0;
 			wordList.addWord(word);
 			wordPosition = 0;
 			break;
