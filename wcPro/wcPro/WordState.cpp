@@ -13,8 +13,12 @@ processType WordState::stateTransfer(char c) {
 	processType process = state << 4;
 
 	//在下方添加状态迁移的代码
-
-
+	if ((c >= 'a') && (c <= 'z')) state = INNERWORD;
+	else if (c == '-'){
+		if (state == INNERWORD) state = CRITICAL;
+		else state = OUTERWORD;
+	}
+	else state = OUTERWORD;
 	//在上方添加状态迁移的代码，其他代码不要动
 
 	process = process | state;

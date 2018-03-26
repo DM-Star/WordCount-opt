@@ -30,7 +30,7 @@ void wordCount(char *fileName, WordList &wordList) {
 	int delta = 'a' - 'A';
 	do {
 		c = in.get();
-		if (c >= 'A'&&c <= 'Z') c += delta;
+		if (c <= 'Z'&&c >= 'A') c += delta;
 		process = wordState.stateTransfer(c);
 
 		switch (process) {
