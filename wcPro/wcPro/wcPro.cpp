@@ -11,7 +11,7 @@ void outPut(char outFile[], WordList &wordList);		//用于输出结果
 int main(int argc, char **argv) {
 	WordList wordList;
 
-	wordCount("wcPro.cpp", wordList);
+	wordCount(argv[1], wordList);
 	outPut("result.txt", wordList);
 
 	return 0;
