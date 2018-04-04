@@ -59,6 +59,9 @@ namespace Test_20183251
 			//
 			// TODO: Add test logic here
 			//
+			WordState state;
+			processType process = state.stateTransfer(' ');
+			Assert::AreEqual(PROCESS_33, process);
 		};
 	};
 }

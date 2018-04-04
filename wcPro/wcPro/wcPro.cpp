@@ -8,6 +8,7 @@ using namespace std;
 void wordCount(char *fileName, WordList &wordList);		//用于词频统计
 void outPut(char outFile[], WordList &wordList);		//用于输出结果
 
+
 int main(int argc, char **argv) {
 	WordList wordList;
 
@@ -16,6 +17,7 @@ int main(int argc, char **argv) {
 
 	return 0;
 }
+
 
 void wordCount(char *fileName, WordList &wordList) {
 	char word[MAX_WORD_LEN];
