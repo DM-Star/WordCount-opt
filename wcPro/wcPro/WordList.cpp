@@ -11,9 +11,15 @@ WordList::WordList() {
 
 
 WordList::~WordList() {
-    delete pWordHead;
-
+	Word *p = pWordHead;
+	while (p != nullptr) {
+		pWordHead = p->next;
+		delete p;
+		p = pWordHead;
+	}
+	
     for (int i = 0; i < 128; i++) {
+		if (index[i] != nullptr)
         delete index[i];
         index[i] = nullptr;
     }
@@ -80,6 +86,16 @@ void WordList::outPut() {
 
         p = p->next;
     }
+}
+
+Word * WordList::getHead()
+{
+	return pWordHead;
+}
+
+Word * WordList::getTail()
+{
+	return pWordTail;
 }
 
 int WordList::Hash(char* word) {

@@ -3,11 +3,11 @@
 #define WCPRO_WORDLIST_H_
 
 #pragma once
-#include<iostream>
+#include <iostream>
 #include <cstring>
 using namespace std;
 
-#define    MAX_WORD_LEN    20
+#define    MAX_WORD_LEN    40
 
 // This structure is used to store words and word frequencies
 struct Word {
@@ -33,8 +33,9 @@ struct Word {
     }
     // If a pointer is used, it is released in the destructor
     ~Word() {
+		/*if(next!=nullptr)
         delete next;
-        next = nullptr;
+        next = nullptr;*/
     }
 };
 
@@ -47,6 +48,7 @@ struct WordIndex {
         next = theNext;
     }
     ~WordIndex() {
+		if(next!=nullptr)
         delete next;
         next = nullptr;
     }
@@ -71,6 +73,8 @@ class WordList {
     ~WordList();
     void addWord(char word[]);
     void outPut();
+	Word* getHead();
+	Word* getTail();
 };
 
 #endif  // WCPRO_WORDLIST_H_
