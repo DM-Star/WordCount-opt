@@ -1,76 +1,83 @@
 // Copyright[2018]<Star>
 #include<iostream>
 #include<fstream>
+#include <time.h>
 
 #include"WordState.h"
 #include"WordList.h"
 using namespace std;
 
-bool inputCheck(char *fileName, fstream &in);
+char *inputCheck(char *fileName);
 // word frequency statistics
-void wordCount(fstream &in, WordList &wordList);
+void wordCount(char *buffer, WordList &wordList);
 // output results
 void outPut(char outFile[], WordList &wordList);
 
 int main(int argc, char **argv) {
-    fstream in;
-    if (!inputCheck(argv[1], in)) {
-        in.close();
-        return 0;
-    }
+	clock_t start = clock();
+	char *buffer = inputCheck(argv[1]);
+    if (buffer == nullptr) return 0;
 
     WordList wordList;
-    wordCount(in, wordList);
+    wordCount(buffer, wordList);
     outPut("result.txt", wordList);
 
-    in.close();
+	clock_t ends = clock();
+
+	cout << "Running Time : " << (double)(ends - start) / CLOCKS_PER_SEC << endl;
+	delete[]buffer;
     return 0;
 }
 
-bool inputCheck(char *fileName, fstream &in) {
-    char *A = ".txt";
-    char B[MAX_WORD_LEN] = "";
-    int i = strlen(fileName) - 1;
-    int j = 0;
-    for (i = strlen(fileName) - 1; i >= 0; i--) {
-        if (fileName[i] == '.') {
-            for (j = i; j < strlen(fileName); j++)
-            B[j - i] = fileName[j];
-        }
-    }
-    if (strcmp(A, B) != 0) {
-        cout << fileName << "not a 'txt' file";
-        return false;
-    }
+char *inputCheck(char *fileName) {
+	char B[MAX_WORD_LEN] = "";
+	for (int i = strlen(fileName) - 1; i >= 0; i--) {
+		if (fileName[i] == '.') {
+			for (int j = i; j < strlen(fileName); j++)
+				B[j - i] = fileName[j];
+		}
+	}
+	if (strcmp(".txt", B) != 0) {
+		cout << fileName << "not a 'txt' file";
+		return nullptr;
+	}
 
-    in.open(fileName);
-    if (!in) {  // Determine if the file exists
-        cout << fileName << "file not exists" << endl;
-        return false;
-    }
+	ifstream in(fileName, ios::binary);
+	if (!in) {  // Determine if the file exists
+		cout << fileName << "file not exists" << endl;
+		return nullptr;
+	}
+	filebuf *pbuf = in.rdbuf();
 
-    char ch;
-    ch = in.get();
-    if (ch == EOF) {  // Determine if the file is empty
-        cout << fileName << "file is empty!" << endl;
-        return false;
-    }
+	// 调用buffer对象方法获取文件大小  
+	long size = pbuf->pubseekoff(0, ios::end, ios::in);
+	if (size == 0) {
+		cout << fileName << "file is empty" << endl;
+		in.close();
+		return nullptr;
+	}
+	pbuf->pubseekpos(0, ios::in);
 
-    return true;
+	// 分配内存空间  
+	char *ch = new char[size + 1];
+	pbuf->sgetn(ch, size);
+	ch[size] = '\0';
+	in.close();
+
+	return ch;
 }
 
-void wordCount(fstream &in, WordList &wordList) {
+void wordCount(char *buffer, WordList &wordList) {
     char word[MAX_WORD_LEN];
     WordState wordState;
     processType process;
 
-	in.seekg(0);
     char c;
 
     int wordPosition = 0;
     int delta = 'a' - 'A';
     do {
-        c = in.get();
+		c = *buffer++;
         if (c <= 'Z'&&c >= 'A') c += delta;
         process = wordState.stateTransfer(c);
 
@@ -94,7 +101,7 @@ void wordCount(fstream &in, WordList &wordList) {
             word[wordPosition] = c;
             wordPosition++;
         }
-    } while (c != EOF);
+    } while (c != '\0');
 }
 
 void outPut(char outFile[], WordList &wordList) {

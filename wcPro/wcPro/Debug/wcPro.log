@@ -1,8 +1,5 @@
 ﻿  wcPro.cpp
-c:\users\star\desktop\desktop\program\github\wordcount-opt\wcpro\wcpro\wcpro.cpp(37): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
-  Compiling...
-  WordList.cpp
-  Generating Code...
+c:\users\star\desktop\desktop\program\github\wordcount-opt\wcpro\wcpro\wcpro.cpp(36): warning C4018: '<': signed/unsigned mismatch
+c:\users\star\desktop\desktop\program\github\wordcount-opt\wcpro\wcpro\wcpro.cpp(53): warning C4244: 'initializing': conversion from 'std::streamoff' to 'long', possible loss of data
   wcPro.vcxproj -> C:\Users\Star\Desktop\Desktop\Program\gitHub\WordCount-opt\wcPro\Debug\wcPro.exe
   wcPro.vcxproj -> C:\Users\Star\Desktop\Desktop\Program\gitHub\WordCount-opt\wcPro\Debug\wcPro.pdb (Partial PDB)
