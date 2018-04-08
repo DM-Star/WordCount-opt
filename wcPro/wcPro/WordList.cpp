@@ -72,7 +72,7 @@ void WordList::outPut() {
 	}
 	heapSort(word, wordNum);	//堆排序
 
-	//输出
+	//输出那个
 	cout << word[2]->word << ' ' << word[2]->num;
 	for (int i = 3; i < wordNum + 2; i++) cout << endl << word[i]->word << ' ' << word[i]->num;
 
