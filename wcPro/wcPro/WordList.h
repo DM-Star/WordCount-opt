@@ -14,7 +14,6 @@ struct Word {
     char word[MAX_WORD_LEN];
     int num;
     Word *next;
-    Word *previous;
 
     // According to the finalized data structure type
     // you can also continue to expand the structure
@@ -23,36 +22,24 @@ struct Word {
         word[0] = 0;
         num = 0;
         next = nullptr;
-        previous = nullptr;
     }
-    Word(char* theWord, int theNum) {
+    Word(char* theWord, int theNum, Word *theNext) {
         strcpy_s(word, theWord);
         num = theNum;
-        next = nullptr;
-        previous = nullptr;
+		next = theNext;
     }
+	int equal(Word *theWord) {
+		if (theWord == nullptr) return -1;
+		if (num > theWord->num) return 1;
+		if (num < theWord->num) return -1;
+		if (strcmp(word, theWord->word) > 0) return -1;
+		if (strcmp(word, theWord->word) < 0) return 1;
+		return 0;
+	}
     // If a pointer is used, it is released in the destructor
-    ~Word() {
-		/*if(next!=nullptr)
-        delete next;
-        next = nullptr;*/
-    }
+    ~Word() {}
 };
 
-
-struct WordIndex {
-    Word* pWord;
-    WordIndex* next;
-    WordIndex(Word* theWord, WordIndex* theNext) {
-        pWord = theWord;
-        next = theNext;
-    }
-    ~WordIndex() {
-		if(next!=nullptr)
-        delete next;
-        next = nullptr;
-    }
-};
 
 // This class is used to manipulate the frequency of all words
 // You can quickly retrieve the 100 words
@@ -62,19 +49,17 @@ struct WordIndex {
 class WordList {
  private:
     int Hash(char *word);  // hash funtion
-    void shiftWord(Word * pWord);  // Advance word by one
-    Word* pWordHead;  // Pointer to Word
-    Word* pWordTail;
-
-    WordIndex* index[128];  // hash index
+	int wordNum;
+    Word* index[128];  // hash index
+	void heapSort(Word* word[], int wordNum);
+	void downFilter(Word* word[], int middleNode);
+	void upFilter(Word* word[], int downNode);
 
  public:
     WordList();
     ~WordList();
     void addWord(char word[]);
     void outPut();
-	Word* getHead();
-	Word* getTail();
 };
 
 #endif  // WCPRO_WORDLIST_H_
