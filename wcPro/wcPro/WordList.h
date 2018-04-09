@@ -8,6 +8,7 @@
 using namespace std;
 
 #define    MAX_WORD_LEN    40
+#define    MAX_INDEX_NUM   512
 
 // This structure is used to store words and word frequencies
 struct Word {
@@ -50,7 +51,7 @@ class WordList {
  private:
     int Hash(char *word);  // hash funtion
 	int wordNum;
-    Word* index[128];  // hash index
+    Word* index[MAX_INDEX_NUM];  // hash index
 	void heapSort(Word* word[], int wordNum);
 	void downFilter(Word* word[], int middleNode);
 	void upFilter(Word* word[], int downNode);

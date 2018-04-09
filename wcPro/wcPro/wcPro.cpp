@@ -14,18 +14,14 @@ void wordCount(char *buffer, WordList &wordList);
 void outPut(char outFile[], WordList &wordList);
 
 int main(int argc, char **argv) {
-	clock_t start = clock();
 	char *buffer = inputCheck(argv[1]);
     if (buffer == nullptr) return 0;
 
     WordList wordList;
     wordCount(buffer, wordList);
-    outPut("result.txt", wordList);
-
-	clock_t ends = clock();
-
-	cout << "Running Time : " << (double)(ends - start) / CLOCKS_PER_SEC << endl;
 	delete[]buffer;
+
+    outPut("result.txt", wordList);
     return 0;
 }
 

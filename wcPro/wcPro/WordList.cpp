@@ -2,14 +2,14 @@
 #include "WordList.h"
 
 WordList::WordList() {
-    for (int i = 0; i < 128; i++) index[i] = nullptr;
+    for (int i = 0; i < MAX_INDEX_NUM; i++) index[i] = nullptr;
 	wordNum = 0;
 }
 
 
 WordList::~WordList() {
 	Word *temp;
-    for (int i = 0; i < 128; i++) {
+    for (int i = 0; i < MAX_INDEX_NUM; i++) {
 		for (Word *p = index[i]; p != nullptr;) {
 			temp = p;
 			p = p->next;
@@ -21,18 +21,26 @@ WordList::~WordList() {
 void WordList::addWord(char word[]) {
     // Add the word to the WordList (or word frequency +1)
     int  p_index = Hash(word);
-    Word* pWord = index[p_index];
+	if (index[p_index] == nullptr) {
+		index[p_index] = new Word(word, 1, index[p_index]);
+		return;
+	}
 
-    while (pWord != nullptr) {
+	Word* pWord = index[p_index];
+    while (pWord->next!= nullptr) {
         if (!strcmp(word, pWord->word)) {
             pWord->num++;
 			return;
         }
 		pWord = pWord->next;
     }
+	if (!strcmp(word, pWord->word)) {
+		pWord->num++;
+		return;
+	}
 
-    pWord = new Word(word, 1, index[p_index]);
-	index[p_index] = pWord;
+    pWord->next = new Word(word, 1, nullptr);
+	//index[p_index] = pWord;
 	wordNum++;
 	
 }
@@ -48,7 +56,7 @@ void WordList::outPut() {
 
 	int iIndex = 0;
 	Word *pWord;
-	for (int iWord=1; iIndex < 128; iIndex++) {
+	for (int iWord=1; iIndex < MAX_INDEX_NUM; iIndex++) {
 		//将索引中的所有结点放入开辟的空间中准备排序
 		pWord = index[iIndex];
 		while (pWord != nullptr) {
@@ -60,7 +68,7 @@ void WordList::outPut() {
 		}
 		if (iWord > 100) break;
 	}
-	for (; iIndex < 128; iIndex++) {
+	for (; iIndex < MAX_INDEX_NUM; iIndex++) {
 		if(pWord==nullptr) pWord = index[iIndex];
 		while (pWord != nullptr) {
 			if (word[1]->equal(pWord) == -1) {
@@ -72,7 +80,7 @@ void WordList::outPut() {
 	}
 	heapSort(word, wordNum);	//堆排序
 
-	//输出那个
+	//输出100个单词及词频
 	cout << word[2]->word << ' ' << word[2]->num;
 	for (int i = 3; i < wordNum + 2; i++) cout << endl << word[i]->word << ' ' << word[i]->num;
 
@@ -81,12 +89,12 @@ void WordList::outPut() {
 
 
 int WordList::Hash(char* word) {
-    int HashVal = 0;
+	int HashVal = 0;
 
-    while (*word != '\0')
-        HashVal += *word++;
+	while (*word != '\0')
+		HashVal += *word++;
 
-    return HashVal & 127;
+	return HashVal & 511;
 }
 
 void WordList::heapSort(Word * word[], int wordNum)
