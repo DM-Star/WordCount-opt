@@ -1,7 +1,6 @@
 // Copyright[2018]<Star>
 #include<iostream>
 #include<fstream>
-#include <time.h>
 
 #include"WordState.h"
 #include"WordList.h"
